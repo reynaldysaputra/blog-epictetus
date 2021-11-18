@@ -1,10 +1,15 @@
 import Layout from "@/components/layout";
 import PostAuthor from "@/components/postAuthor";
 import PostMetaTitle from "@/components/postMetaTitle";
+import Head from 'next/head';
 
 export default function Detail(){
   return(
     <Layout>
+      <Head>
+        <title>Home &mdash; Epictectus</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className='container mx-auto md:px-10 px-10'>
         <div className='md:w-6/12 w-full mx-auto flex flex-col items-center'>
           <PostMetaTitle

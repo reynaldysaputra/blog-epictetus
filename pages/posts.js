@@ -1,6 +1,7 @@
 import CardPost from "@/components/cardPost";
 import Layout from "@/components/layout";
 import SectionHeader from "@/components/sectionHeaders";
+import Head from 'next/head'
 import { useState } from "react";
 import mockPosts from '../utils/posts.json';
 
@@ -9,6 +10,10 @@ export default function Posts() {
 
   return(
     <Layout>
+      <Head>
+        <title>Posts &mdash; Epictectus</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className='container mx-auto md:px-10 px-10'>
         <SectionHeader>Search: UI Design</SectionHeader>
         {!posts.length ? (

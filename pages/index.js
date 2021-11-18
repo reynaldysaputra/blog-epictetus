@@ -3,12 +3,17 @@ import InfoPost from "@/components/infoPost";
 import Layout from "@/components/layout";
 import { useState } from "react"
 import mockPosts from '../utils/posts.json';
+import Head from 'next/head';
 
 export default function Home() {
   const [posts, setPosts] = useState(mockPosts);
 
   return (
     <Layout>
+      <Head>
+        <title>Home &mdash; Epictectus</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className='container mx-auto md:px-10 px-10'>
         <div className='flex items-center flex-wrap -mx-4'>
           <div className='lg:w-8/12 w-full px-4'>
