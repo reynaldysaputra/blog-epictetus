@@ -9,7 +9,7 @@ export default function Posts() {
 
   return(
     <Layout>
-      <div className='container mx-auto md:px-10 xl:px-0 px-0'>
+      <div className='container mx-auto md:px-10 px-10'>
         <SectionHeader>Search: UI Design</SectionHeader>
         {!posts.length ? (
           <div className='text-center py-20'>
@@ -17,9 +17,9 @@ export default function Posts() {
             <p className='text-white/60 mt-5 text-xl w-full lg:w-6/12 mx-auto'>We couldn’t find any posts with the keyword `yahahahayuk`. Please try another keyword.</p>
           </div>
         ) : (
-          <div className='flex flex-wrap -mx-4 md:mt-10 mr-0'>
+          <div className='flex flex-wrap -mx-4 md:mt-10'>
             {posts.map(item => (
-            <div key={item.id} className='lg:w-4/12 md:w-6/12 w-full py-4 px-4'>
+            <div key={item.id} className='lg:w-4/12 md:w-6/12 py-4 px-4'>
               <CardPost 
                   thumbnail={item.thumbnail}
                   category={item.category}

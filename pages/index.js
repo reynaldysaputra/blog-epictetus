@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className='container mx-auto px-5 md:px-10 xl:px-0'>
+      <div className='container mx-auto md:px-10 px-10'>
         <div className='flex items-center flex-wrap -mx-4'>
           <div className='lg:w-8/12 w-full px-4'>
             <img src="/featured-thumbnail.png" alt="thumb" className='rounded-xl w-full'/>
