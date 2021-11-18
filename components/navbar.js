@@ -5,7 +5,7 @@ export default function Navbar(){
 
   return (
     <nav className='py-10'>
-      <div className="container mx-auto px-5 md:px-10 xl:pl-0">
+      <div className="container mx-auto px-5 md:px-10 xl:px-0">
         <div className='flex items-center space-x-4'>
           <div className='w-2/12 flex items-center cursor-pointer'>
             <div className='w-10 h-10 bg-gray-500 rounded flex justify-center items-center mr-5 shadow-2xl'>E</div>
