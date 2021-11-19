@@ -4,9 +4,25 @@ import Layout from "@/components/layout";
 import { useState } from "react"
 import mockPosts from '../utils/posts.json';
 import Head from 'next/head';
+import { formatDate } from "utils/utils";
 
-export default function Home() {
-  const [posts, setPosts] = useState(mockPosts);
+export async function getServerSideProps(contex) {  
+  const thumbPostReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?featured=true`);
+  const thumbPostRes = await thumbPostReq.json();
+
+  const postReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?featured_null=1`);
+  const postRes = await postReq.json();
+
+  return {
+    props: {
+      thumbPost: thumbPostRes.length > 0 ? thumbPostRes[0] : false,
+      posts: postRes
+    }
+  }
+}
+
+export default function Home({thumbPost, posts:initialPosts}) {
+  const [posts, setPosts] = useState(initialPosts);
 
   return (
     <Layout>
@@ -15,38 +31,31 @@ export default function Home() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className='container mx-auto md:px-10 px-10'>
+      {thumbPost && (
         <div className='flex items-center flex-wrap -mx-4'>
           <div className='lg:w-8/12 w-full px-4'>
-            <img src="/featured-thumbnail.png" alt="thumb" className='rounded-xl w-full'/>
+            <img src={process.env.NEXT_PUBLIC_API_URL+thumbPost.thumbnail.formats.medium.url} alt="thumb" className='rounded-xl w-full'/>
           </div>
           <div className='lg:w-4/12 w-full px-4'>
             <InfoPost
-              category='UI DESIGN'
-              date='July 2, 2021'
-              title='Understanding color theory: the color wheel and finding complementary colors'
-              shortDescription='Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum.'
-              authorAvatar='/author-1.png'
-              authorName='Leslie Alexander'
-              authorJob='UI Design'
+              category={thumbPost.category.name}
+              date={formatDate(thumbPost.published_at)}
+              title={thumbPost.title}
+              shortDescription={thumbPost.headline}
+              authorAvatar={process.env.NEXT_PUBLIC_API_URL+thumbPost.author.avatar.url}
+              authorName={thumbPost.author.name}
+              authorJob={thumbPost.author.job}
             />
           </div>
         </div>
+      )}
 
         <hr className='my-10 opacity-50 md:hidden' />
 
         <div className='flex flex-wrap -mx-4 md:mt-10 mr-0'>
           {posts.map(item => (
             <div key={item.id} className='lg:w-4/12 md:w-6/12 w-full py-4 px-4'>
-              <CardPost 
-                thumbnail={item.thumbnail}
-                category={item.category}
-                date={item.date}
-                title={item.title}
-                shortDescription={item.shortDescription}
-                authorAvatar={item.authorAvatar}
-                authorName={item.authorName}
-                authorJob={item.authorJob}
-              />
+              <CardPost {...item} />
             </div>
           ))}
         </div> 
