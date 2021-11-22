@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function InfoPost({category, date, title, shortDescription, authorAvatar,authorName, authorJob, slug}){
   return(
-    <Link href={`/${slug}`}>
+    <Link href={`/detail-post/${slug}`}>
       <a>
         <PostMetaTitle 
           category={category}

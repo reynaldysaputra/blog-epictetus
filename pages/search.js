@@ -3,35 +3,29 @@ import CardPost from "@/components/cardPost";
 import SectionHeader from "@/components/sectionHeaders";
 import Head from 'next/head'
 
-export async function getServerSideProps({params: {category: categorySlug}}) {  
-  const reqCategory = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories?slug=${categorySlug}`);
-  const category = await reqCategory.json();
-
-  const postReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?_where[category.slug]=${categorySlug}`);
+export async function getServerSideProps({query}) {  
+  const postReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?title_contains=${query.q}`);
   const postRes = await postReq.json();
-
 
   return {
     props: {
-      category: category.length > 0 ? category[0] : categorySlug,
-      posts: postRes
+      posts: postRes,
+      querySearch: query.q
     }
   }
 }
 
-export default function Posts({posts, category}) {
-  const categoryName = category.name ? category.name : category;
-
+export default function Posts({posts, querySearch}) {
   return(
     <>
       <Head>
-        <title>{categoryName} &mdash; Epictectus</title>
+        <title>{querySearch} &mdash; Epictectus</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className='container mx-auto md:px-10 px-10'>
-        <SectionHeader>Search: {categoryName}</SectionHeader>
+        <SectionHeader>Search: {querySearch}</SectionHeader>
         {!posts.length ? (
-          <SearchNotFound name={categoryName} />
+          <SearchNotFound name={querySearch} />
         ) : (
           <div className='flex flex-wrap -mx-4 md:mt-10'>
             {posts.map(item => (

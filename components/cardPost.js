@@ -5,12 +5,14 @@ import { formatDate } from "utils/utils";
 export default function CardPost(props){
   return(
     <div>
-      <Link href={props.slug}>
-        <img 
-          src={process.env.NEXT_PUBLIC_API_URL+props.thumbnail.formats.small.url} 
-          alt={props.category.name} 
-          className='w-full rounded cursor-pointer' 
-        />
+      <Link href={`/detail-post/${props.slug}`}>
+        <a>
+          <img 
+            src={process.env.NEXT_PUBLIC_API_URL+props.thumbnail.formats.small.url} 
+            alt={props.category.name} 
+            className='w-full rounded cursor-pointer' 
+          />
+        </a>
       </Link>
       <InfoPost 
           category={props.category.name}

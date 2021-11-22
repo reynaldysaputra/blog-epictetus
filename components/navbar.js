@@ -1,10 +1,22 @@
 import { useState } from "react";
 import Link from 'next/link';
+import Router from 'next/router';
 
 export default function Navbar({categories}){
   const [dropdown, setDropdown] = useState(false);
   const [offCanfas, setOffCanfas] = useState(false);
   const [search, setSearch] = useState(false);
+  const [keyword, setKeyword] = useState('');
+
+  const doSearch = (e) => {
+    e.preventDefault();
+    Router.push({
+      pathname: '/search',
+      query: {
+        q: keyword
+      }
+    })
+  }
 
   return (
     <nav className='py-10'>
@@ -68,14 +80,18 @@ export default function Navbar({categories}){
               </svg>
             </button>
           </div>
-          <div className={`lg:w-3/12 w-full absolute lg:static left-0 lg:block transition-all ${search ? 'top-10' : '-top-40'}`}>
+          <div className={`lg:w-3/12 px-8 w-full absolute lg:static left-0 lg:block transition-all ${search ? 'top-10' : '-top-40'}`}>
             <button className='absolute top-3 right-14 lg:hidden' onClick={() => setSearch(false)}>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-            <input 
-              className='w-full px-5 py-3 lg:py-2 text-sm bg-gray-700 outline-none rounded-lg lg:rounded-full bg-search pl-10' 
-              placeholder='Search..'
-            />
+            <form onSubmit={doSearch}>
+              <input 
+                className='w-full px-5 py-3 lg:py-2 text-sm bg-gray-700 outline-none rounded-lg lg:rounded-full bg-search pl-10' 
+                placeholder='Search..'
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+              />
+            </form>
           </div>
         </div>
       </div>
