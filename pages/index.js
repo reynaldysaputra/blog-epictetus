@@ -2,7 +2,6 @@ import CardPost from "@/components/cardPost";
 import InfoPost from "@/components/infoPost";
 import Layout from "@/components/layout";
 import { useState } from "react"
-import mockPosts from '../utils/posts.json';
 import Head from 'next/head';
 import { formatDate } from "utils/utils";
 
@@ -10,7 +9,7 @@ export async function getServerSideProps(contex) {
   const thumbPostReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?featured=true`);
   const thumbPostRes = await thumbPostReq.json();
 
-  const postReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?featured_null=1`);
+  const postReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?featured_ne=true`);
   const postRes = await postReq.json();
 
   return {
@@ -21,11 +20,9 @@ export async function getServerSideProps(contex) {
   }
 }
 
-export default function Home({thumbPost, posts:initialPosts}) {
-  const [posts, setPosts] = useState(initialPosts);
-
+export default function Home({thumbPost, posts}) {
   return (
-    <Layout>
+    <>
       <Head>
         <title>Home &mdash; Epictectus</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
@@ -42,9 +39,10 @@ export default function Home({thumbPost, posts:initialPosts}) {
               date={formatDate(thumbPost.published_at)}
               title={thumbPost.title}
               shortDescription={thumbPost.headline}
-              authorAvatar={process.env.NEXT_PUBLIC_API_URL+thumbPost.author.avatar.url}
+              authorAvatar={thumbPost.author.avatar.url}
               authorName={thumbPost.author.name}
               authorJob={thumbPost.author.job}
+              slug={thumbPost.slug}
             />
           </div>
         </div>
@@ -60,6 +58,6 @@ export default function Home({thumbPost, posts:initialPosts}) {
           ))}
         </div> 
       </div>
-    </Layout>
+    </>
   )
 }

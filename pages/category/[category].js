@@ -1,21 +1,31 @@
 import CardPost from "@/components/cardPost";
-import Layout from "@/components/layout";
 import SectionHeader from "@/components/sectionHeaders";
 import Head from 'next/head'
-import { useState } from "react";
-import mockPosts from '../utils/posts.json';
 
-export default function Posts() {
-  const [posts, setPosts] = useState(mockPosts);
+export async function getServerSideProps({params: {category: categorySlug}}) {  
+  const reqCategory = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories?slug=${categorySlug}`);
+  const category = await reqCategory.json();
 
+  const postReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?_where[category.slug]=${categorySlug}`);
+  const postRes = await postReq.json();
+
+  return {
+    props: {
+      category: category.length > 0 ? category[0] : {},
+      posts: postRes
+    }
+  }
+}
+
+export default function Posts({posts, category}) {
   return(
-    <Layout>
+    <>
       <Head>
-        <title>Posts &mdash; Epictectus</title>
+        <title>{category.name} &mdash; Epictectus</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className='container mx-auto md:px-10 px-10'>
-        <SectionHeader>Search: UI Design</SectionHeader>
+        <SectionHeader>Search: {category.name}</SectionHeader>
         {!posts.length ? (
           <div className='text-center py-20'>
             <h2 className='text-6xl'>No result 😥</h2>
@@ -25,21 +35,12 @@ export default function Posts() {
           <div className='flex flex-wrap -mx-4 md:mt-10'>
             {posts.map(item => (
             <div key={item.id} className='lg:w-4/12 md:w-6/12 py-4 px-4'>
-              <CardPost 
-                  thumbnail={item.thumbnail}
-                  category={item.category}
-                  date={item.date}
-                  title={item.title}
-                  shortDescription={item.shortDescription}
-                  authorAvatar={item.authorAvatar}
-                  authorName={item.authorName}
-                  authorJob={item.authorJob}
-                />
+              <CardPost {...item} />
               </div>
             ))}
           </div>
         )}
       </div>
-    </Layout>
+    </>
   )
 }

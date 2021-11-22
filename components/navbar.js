@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Link from 'next/link';
 
-export default function Navbar(){
+export default function Navbar({categories}){
   const [dropdown, setDropdown] = useState(false);
   const [offCanfas, setOffCanfas] = useState(false);
   const [search, setSearch] = useState(false);
@@ -34,10 +34,14 @@ export default function Navbar(){
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
             <ul className='flex lg:space-x-7 flex-col lg:flex-row p-10 lg:p-0 space-y-4 lg:space-y-0'>
-              <li><Link href="/posts"><a className='hover:underline'>UI Design</a></Link></li>
-              <li><Link href="/posts"><a className='hover:underline'>Front-End</a></Link></li>
-              <li><Link href="/posts"><a className='hover:underline'>Back-End</a></Link></li>
-              <li className='relative'>
+              {categories.map(item => (
+                <li key={item.id}>
+                  <Link href={`/category/${item.slug}`}>
+                    <a className='hover:underline'>{item.name}</a>
+                    </Link>
+                </li>
+              ))}
+              {/* <li className='relative'>
                 <a className='hover:underline cursor-pointer flex items-center' onClick={() => setDropdown(!dropdown)}>
                   Others
                   <svg className='ml-1' width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +55,7 @@ export default function Navbar(){
                     <li className='flex  py-2 px-2 hover:bg-gray-700/60'><a href="#" className='w-full'>Open Source</a></li>
                   </ul>
                 )}
-              </li>
+              </li> */}
             </ul>
           </div>
           <div className='w-3/12 lg:hidden text-right'>
