@@ -1,7 +1,5 @@
 import CardPost from "@/components/cardPost";
 import InfoPost from "@/components/infoPost";
-import Layout from "@/components/layout";
-import { useState } from "react"
 import Head from 'next/head';
 import { formatDate } from "utils/utils";
 

@@ -3,6 +3,10 @@ import 'tailwindcss/tailwind.css'
 import App from 'next/app';
 
 function MyApp({ Component, pageProps, categories }) {
+  if (Component.getLayout) {
+    return Component.getLayout(<Component {...pageProps} />)
+  }
+  
   return <Layout categories={categories}>
     <Component {...pageProps} />
   </Layout>

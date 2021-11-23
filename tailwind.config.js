@@ -42,6 +42,7 @@ module.exports = {
 
       addUtilities(utilities);
     }),
-    require('@tailwindcss/typography')
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms')
   ],
 }
