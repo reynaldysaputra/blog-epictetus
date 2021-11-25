@@ -1,15 +1,25 @@
 import SearchNotFound from "@/components/404-search";
 import CardPost from "@/components/cardPost";
 import SectionHeader from "@/components/sectionHeaders";
-import Head from 'next/head'
+import Head from 'next/head';
+import nookies from 'nookies';
 
-export async function getServerSideProps({params: {category: categorySlug}}) {  
+export async function getServerSideProps({params: {category: categorySlug}, ...ctx}) {  
   const reqCategory = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories?slug=${categorySlug}`);
   const category = await reqCategory.json();
 
   const postReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?_where[category.slug]=${categorySlug}`);
   const postRes = await postReq.json();
 
+  const {tokenEpictetus} = nookies.get(ctx);
+
+  if(!tokenEpictetus){
+    return {
+      redirect: {
+        destination: '/login'
+      }
+    }    
+  }
 
   return {
     props: {

@@ -2,10 +2,21 @@ import SearchNotFound from "@/components/404-search";
 import CardPost from "@/components/cardPost";
 import SectionHeader from "@/components/sectionHeaders";
 import Head from 'next/head'
+import nookies from 'nookies';
 
-export async function getServerSideProps({query}) {  
+export async function getServerSideProps({query, ...ctx}) {  
   const postReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?title_contains=${query.q}`);
   const postRes = await postReq.json();
+
+  const {tokenEpictetus} = nookies.get(ctx);
+
+  if(!tokenEpictetus){
+    return {
+      redirect: {
+        destination: '/login'
+      }
+    }    
+  }
 
   return {
     props: {

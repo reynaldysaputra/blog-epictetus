@@ -2,6 +2,7 @@ import CardPost from "@/components/cardPost";
 import InfoPost from "@/components/infoPost";
 import Head from 'next/head';
 import { formatDate } from "utils/utils";
+import nookies from 'nookies'
 
 export async function getServerSideProps(contex) {  
   const thumbPostReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?featured=true`);
@@ -9,6 +10,16 @@ export async function getServerSideProps(contex) {
 
   const postReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?featured_ne=true`);
   const postRes = await postReq.json();
+
+  const {tokenEpictetus} = nookies.get(contex);
+
+  if(!tokenEpictetus){
+    return {
+      redirect: {
+        destination: '/login'
+      }
+    }    
+  }
 
   return {
     props: {

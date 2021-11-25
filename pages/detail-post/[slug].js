@@ -3,11 +3,22 @@ import PostAuthor from "@/components/postAuthor";
 import PostMetaTitle from "@/components/postMetaTitle";
 import Head from 'next/head';
 import ReactMarkdown from "react-markdown";
+import nookies from 'nookies';
 
 export async function getServerSideProps(ctx){
   const {slug} = ctx.params;
   const postReqDetail = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?slug=${slug}`);
   const postReqRes = await postReqDetail.json();
+
+  const {tokenEpictetus} = nookies.get(ctx);
+
+  if(!tokenEpictetus){
+    return {
+      redirect: {
+        destination: '/login'
+      }
+    }    
+  }
   
   return {
     props: {

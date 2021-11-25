@@ -1,5 +1,22 @@
 import { useState } from "react"
 import Link from "next/link";
+import nookies from 'nookies'
+
+export async function getServerSideProps(ctx){
+  const {tokenEpictetus} = nookies.get(ctx);
+
+  if(tokenEpictetus){
+    return {
+      redirect: {
+        destination: '/'
+      }
+    }    
+  }
+  
+  return {
+    props: {}
+  }
+}
 
 export default function Register() {
   const [fields, setFields] = useState({});

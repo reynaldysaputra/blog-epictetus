@@ -1,6 +1,7 @@
 import Layout from '@/components/layout'
 import 'tailwindcss/tailwind.css'
-import App from 'next/app';
+import { parseCookies } from 'nookies'
+import Router from 'next/router';
 
 function MyApp({ Component, pageProps, categories }) {
   if (Component.getLayout) {
@@ -12,16 +13,44 @@ function MyApp({ Component, pageProps, categories }) {
   </Layout>
 }
 
-MyApp.getInitialProps = async (appContext) => {
-  const appProps = await App.getInitialProps(appContext);
+const redirectRoute = (ctx, location) => {
+  if(ctx.req){
+    ctx.res.writeHead(307, {Location: location});
+    ctx.res.end();
+  }else {
+    Router.push(location);
+  }
+}
+
+MyApp.getInitialProps = async ({Component, ctx}) => {
+  let appProps = {};
 
   const reqCategories = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
   const categories = await reqCategories.json();
 
-  return{
-    ...appProps,
-    categories
+  const {tokenEpictetus} = parseCookies(ctx);
+
+  if(Component.getInitialProps){
+    appProps = await Component.getInitialProps(ctx);
   }
+
+  // if(!tokenEpictetus){
+  //   if(ctx.pathname !== '/login' && ctx.pathname !== '/register'){
+  //     redirectRoute(ctx, '/login');
+
+  //     return {
+  //       ...appProps,
+  //       categories,
+  //     }
+  //   }
+  // }else if(ctx.pathname === '/login'){
+  //   redirectRoute(ctx, '/');
+  
+    return{
+      ...appProps,
+      categories
+    }
+  // }
 }
 
 export default MyApp

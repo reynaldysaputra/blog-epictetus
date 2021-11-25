@@ -1,7 +1,24 @@
 import Link from "next/link";
 import { useState } from "react";
-import { parseCookies, setCookie } from 'nookies'
+import { setCookie } from 'nookies'
 import Router from "next/router";
+import nookies from 'nookies'
+
+export async function getServerSideProps(ctx){
+  const {tokenEpictetus} = nookies.get(ctx);
+
+  if(tokenEpictetus){
+    return {
+      redirect: {
+        destination: '/'
+      }
+    }    
+  }
+  
+  return {
+    props: {}
+  }
+}
 
 export default function Login(params) {
   const [fields, setFields] = useState({});
@@ -35,9 +52,6 @@ export default function Login(params) {
       })
 
       Router.replace('/');
-
-      const cookies = parseCookies()
-      console.log({ cookies })
     }
   }
 
@@ -66,8 +80,12 @@ export default function Login(params) {
           <div className="p-5">
             <div className="grid grid-cols-3 gap-1">
               <button type="button" className="transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal text-center inline-block">MailUp</button>
-              <button type="button" className="transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal text-center inline-block">Google</button>
-              <button type="button" className="transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal text-center inline-block">Github</button>
+              <a href={`${process.env.NEXT_PUBLIC_API_URL}/connect/google`}>
+                <button type="button" className="transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal text-center inline-block">Google</button>
+              </a>
+              <a href={`${process.env.NEXT_PUBLIC_API_URL}/connect/github`}>
+                <button button type="button" className="transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal text-center inline-block">Github</button>
+              </a>
             </div>
           </div>
           <div className="py-5">
